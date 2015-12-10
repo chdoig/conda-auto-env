@@ -12,6 +12,12 @@ To install add this line to your .bashrc or .bash-profile:
 
        source /path/to/conda_auto_env.sh
 
+If using zsh, add these lines to your .zshrc:
+
+       source /path/to/conda_auto_env.sh
+       autoload -U add-zsh-hook
+       add-zsh-hook chpwd conda_auto_env
+
 ### Remote environments
 
 Alternatively, if you would also like to have support remote anaconda.org environments. Change those instructions to ``source /path/to/conda_auto_env_remote.sh``. To specify a remote environment create an ``environment-remote.yml`` file with the name and channel of your environment:
