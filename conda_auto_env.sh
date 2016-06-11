@@ -16,7 +16,7 @@ function conda_auto_env() {
     # echo "environment.yml file found"
     ENV=$(head -n 1 environment.yml | cut -f2 -d ' ')
     # Check if you are already in the environment
-    if [[ $PATH != *$ENV* ]]; then
+    if [[ $PATH != */envs/*$ENV*/* ]]; then
       # Check if the environment exists
       source activate $ENV
       if [ $? -eq 0 ]; then
