@@ -22,9 +22,7 @@ function conda_auto_env() {
       source activate $ENV
       # Set root directory of active environment.
       CONDA_ENVIRONMENT_ROOT="$(pwd)"
-      if [ $? -eq 0 ]; then
-        :
-      else
+      if [ $? -ne 0 ]; then
         # Create the environment and activate.
         echo "Conda environment '$ENV' doesn't exist: Creating."
         conda env create -q
