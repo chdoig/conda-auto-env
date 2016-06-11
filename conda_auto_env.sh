@@ -17,8 +17,10 @@ function conda_auto_env() {
     ENV=$(head -n 1 environment.yml | cut -f2 -d ' ')
     # Check if you are already in the environment
     if [[ $PATH != */envs/*$ENV*/* ]]; then
-      # Check if the environment exists
+      # Attempt to activate environment
+      CONDA_ENVIRONMENT_ROOT="" #For spawned shells
       source activate $ENV
+      CONDA_ENVIRONMENT_ROOT="$(pwd)"
       if [ $? -eq 0 ]; then
         :
       else
@@ -28,6 +30,12 @@ function conda_auto_env() {
         source activate $ENV
       fi
     fi
+  elif [[ $PATH = */envs/* ]]\
+    && [[ $(pwd) != $CONDA_ENVIRONMENT_ROOT ]]\
+    && [[ $(pwd) != $CONDA_ENVIRONMENT_ROOT/* ]]
+  then
+    CONDA_ENVIRONMENT_ROOT=""
+    source deactivate
   fi
 }
 
