@@ -63,4 +63,16 @@ function conda_auto_env_remote() {
   fi
 }
 
-export PROMPT_COMMAND=conda_auto_env_remote
+# Check active shell.
+if [[ $(ps -p$$ -ocmd=) == "zsh" ]]; then
+  # For zsh, use the chpwd hook.
+  autoload -U add-zsh-hook
+  add-zsh-hook chpwd conda_auto_env
+  # Run for present directory as it does not fire the above hook.
+  conda_auto_env
+  # More aggressive option in case the above hook misses some use case:
+  #precmd() { conda_auto_env; }
+else
+  # For bash, no hooks and we rely on the env. var. PROMPT_COMMAND:
+  export PROMPT_COMMAND=conda_auto_env
+fi
