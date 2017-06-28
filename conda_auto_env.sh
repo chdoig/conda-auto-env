@@ -30,5 +30,3 @@ function conda_auto_env() {
     fi
   fi
 }
-
-export PROMPT_COMMAND="conda_auto_env;$PROMPT_COMMAND"
