@@ -1,6 +1,6 @@
 # conda-auto-env
 
-(Semi-)Automatically activate a conda environment when entering a folder with an environment.yml file.
+(Semi-)Automatically activate a conda environment when entering a folder with an `environment.yml` file.
 
 If the environment doesn't exist, `conda-auto-env` creates it and activates it for you.
 
