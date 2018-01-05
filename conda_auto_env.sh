@@ -11,13 +11,12 @@
 #       source /path/to/conda_auto_env.sh
 #
 
-ACTIVATED="${ENV} activated!"
-DEACTIVATE="${ENV} is already activated. Deactivating..."
-
 function conda_auto_env() {
   if [ -e "environment.yml" ]; then
     echo "environment.yml file found"
     ENV=$(head -n 1 environment.yml | cut -f2 -d ' ')
+    ACTIVATED="${ENV} activated!"
+    DEACTIVATE="${ENV} is already activated. Deactivating..."
     CURRENT_ENV=$(conda env list | grep \* | cut -f 1 -d " ")
     # Check if you are already in the environment
     if [ $ENV = $CURRENT_ENV ]; then
