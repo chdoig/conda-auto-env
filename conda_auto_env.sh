@@ -17,7 +17,7 @@ function conda_auto_env() {
     ENV=$(head -n 1 environment.yml | cut -f2 -d ' ')
     CURRENT_ENV=$(conda env list | grep \* | cut -f 1 -d " ")
     # Check if you are already in the environment
-    if [ $ENV = $CURRENT_ENV]; then
+    if [ $ENV = $CURRENT_ENV ]; then
       conda deactivate
     elif [[ $PATH != *$ENV* ]]; then
       # Check if the environment exists
