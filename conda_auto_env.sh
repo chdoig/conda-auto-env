@@ -47,9 +47,7 @@ function conda_auto_env() {
 
   echo "Processing the environment: ${ENV}"
 
-  CURRENT_ENV=$(conda env list | grep \* | cut -f 1 -d " ")
-
-  if [ $ENV = $CURRENT_ENV ]; then
+  if [ $ENV = $CONDA_DEFAULT_ENV ]; then
     # ENV is already activated. Deactivate
     deactivate_env
   elif [[ $PATH != *$ENV* ]]; then
@@ -72,4 +70,5 @@ function conda_auto_env() {
   # Make sure utility functions are local
   unset -f activate_env
   unset -f deactivate_env
+  unset ENV
 }
