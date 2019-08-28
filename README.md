@@ -10,7 +10,14 @@ This functionality was inspired by [conda auto activate](https://github.com/sott
 
 To install add this line to your .bashrc, .bash-profile, or .zshrc:
 
-       source /path/to/conda_auto_env.sh
+    source /path/to/conda_auto_env.sh
+
+If using zsh, add these lines to your .zshrc:
+
+    source /path/to/conda_auto_env.sh
+    autoload -U add-zsh-hook
+    add-zsh-hook chpwd conda_auto_env
+
 
 ### Remote environments
 
