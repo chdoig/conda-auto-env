@@ -10,6 +10,10 @@
 #
 #       source /path/to/conda_auto_env.sh
 #
+# ------------------------------------------------------------------------------
+# Emir Lejlic notes - 28.08.2019:
+#   - This is tested on conda version: 4.7.5
+# ------------------------------------------------------------------------------
 
 function conda_auto_env() {
   if [ -e "environment.yml" ]; then
@@ -19,14 +23,14 @@ function conda_auto_env() {
     if [[ $PATH != */envs/*$ENV*/* ]]; then
       # Attempt to activate environment.
       CONDA_ENVIRONMENT_ROOT="" #For spawned shells
-      source activate $ENV
+      conda activate $ENV
       # Set root directory of active environment.
       CONDA_ENVIRONMENT_ROOT="$(pwd)"
       if [ $? -ne 0 ]; then
         # Create the environment and activate.
         echo "Conda environment '$ENV' doesn't exist: Creating."
         conda env create -q
-        source activate $ENV
+        conda activate $ENV
       fi
     fi
   # Deactivate active environment if we are no longer among its subdirectories.
@@ -35,7 +39,7 @@ function conda_auto_env() {
     && [[ $(pwd) != $CONDA_ENVIRONMENT_ROOT/* ]]
   then
     CONDA_ENVIRONMENT_ROOT=""
-    source deactivate
+    conda deactivate
   fi
 }
 
