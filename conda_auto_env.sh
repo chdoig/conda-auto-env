@@ -32,3 +32,5 @@ function conda_auto_env() {
 }
 
 export PROMPT_COMMAND=conda_auto_env
+
+chpwd_functions+=(conda_auto_env)
