@@ -18,14 +18,14 @@ function conda_auto_env() {
     # Check if you are already in the environment
     if [[ $PATH != *$ENV* ]]; then
       # Check if the environment exists
-      source activate $ENV
+      conda activate $ENV
       if [ $? -eq 0 ]; then
         :
       else
         # Create the environment and activate
         echo "Conda env '$ENV' doesn't exist."
         conda env create -q
-        source activate $ENV
+        conda activate $ENV
       fi
     fi
   fi
