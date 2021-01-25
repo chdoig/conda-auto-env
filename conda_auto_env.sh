@@ -40,7 +40,7 @@ function conda_auto_env() {
 }
 
 # Check active shell.
-if [[ $(ps -p$$ -ocmd=) == "zsh" ]]; then
+if [[ $(ps -p$$ -ocommand=) == "-zsh" ]]; then
   # For zsh, use the chpwd hook.
   autoload -U add-zsh-hook
   add-zsh-hook chpwd conda_auto_env
