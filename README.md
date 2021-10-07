@@ -8,7 +8,7 @@ This functionality was inspired by [conda auto activate](https://github.com/sott
 
 ## Install
 
-To install add this line to your .bashrc or .bash-profile:
+To install add this line to your .bashrc, .bash-profile, or .zshrc:
 
        source /path/to/conda_auto_env.sh
 

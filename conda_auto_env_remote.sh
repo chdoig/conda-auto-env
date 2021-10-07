@@ -18,17 +18,18 @@ function conda_auto_env_remote() {
   if [ -e "environment.yml" ]; then
     # echo "environment.yml file found"
     ENV=$(head -n 1 environment.yml | cut -f2 -d ' ')
-    # Check if you are already in the environment
-    if [[ $PATH != *$ENV* ]]; then
-      # Check if the environment exists
-      source activate $ENV
-      if [ $? -eq 0 ]; then
-        :
-      else
-        # Create the environment and activate
-        echo "Conda env '$ENV' doesn't exist."
+    # Check if the environment is already active.
+    if [[ $PATH != */envs/$ENV/* ]]; then
+      # Attempt to activate environment.
+      CONDA_ENVIRONMENT_ROOT="" #For spawned shells
+      conda activate $ENV
+      # Set root directory of active environment.
+      CONDA_ENVIRONMENT_ROOT="$(pwd)"
+      if [ $? -ne 0 ]; then
+        # Create the environment and activate.
+        echo "Conda environment '$ENV' doesn't exist: Creating."
         conda env create -q
-        source activate $ENV
+        conda activate $ENV
       fi
     fi
   fi
@@ -36,21 +37,42 @@ function conda_auto_env_remote() {
     # echo "environment.yml file found"
     ENV=$(sed -n '1p' environment-remote.yml | cut -f2 -d ' ')
     CHANNEL=$(sed -n '2p' environment-remote.yml | cut -f2 -d ' ')
-    # Check if you are already in the environment
-    if [[ $PATH != *$ENV* ]]; then
-      # Check if the environment exists
-      source activate $ENV
-      if [ $? -eq 0 ]; then
-        :
-      else
-        # Create the environment and activate
+    # Check if the environment is already active.
+    if [[ $PATH != */envs/$ENV/* ]]; then
+      # Attempt to activate environment.
+      CONDA_ENVIRONMENT_ROOT="" #For spawned shells
+      conda activate $ENV
+      # Set root directory of active environment.
+      CONDA_ENVIRONMENT_ROOT="$(pwd)"
+      if [ $? -ne 0 ]; then
+        # Create the environment and activate.
         echo "Conda env '$ENV' doesn't exist."
         REMOTE=$CHANNEL'/'$ENV
         conda env create $REMOTE -q
-        source activate $ENV
+        conda activate $ENV
       fi
     fi
   fi
+  # Deactivate active environment if we are no longer among its subdirectories.
+  if [[ $PATH = */envs/* ]]\
+    && ([[ $(pwd) != $CONDA_ENVIRONMENT_ROOT ]]\
+      || [[ $(pwd) != $CONDA_ENVIRONMENT_ROOT/* ]])
+  then
+    CONDA_ENVIRONMENT_ROOT=""
+    conda deactivate
+  fi
 }
 
-export PROMPT_COMMAND=conda_auto_env_remote
+# Check active shell.
+if [[ $(ps -p$$ -ocommand=) == "-zsh" ]]; then
+  # For zsh, use the chpwd hook.
+  autoload -U add-zsh-hook
+  add-zsh-hook chpwd conda_auto_env
+  # Run for present directory as it does not fire the above hook.
+  conda_auto_env
+  # More aggressive option in case the above hook misses some use case:
+  #precmd() { conda_auto_env; }
+else
+  # For bash, no hooks and we rely on the env. var. PROMPT_COMMAND:
+  export PROMPT_COMMAND=conda_auto_env
+fi
